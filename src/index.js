@@ -32,15 +32,23 @@ app.listen(port, () => {
   console.log('Server is up on port '+ port)
 })
 
-const jwt = require('jsonwebtoken')
+const Task = require('./models/task')
+const User = require('./models/user')
 
-const myFunction = async () => {
-  // return value from sign is the required authentication token
-  const token = jwt.sign({ _id: 'abac123' }, 'thisismynewcourse', { expiresIn: '7 days' })
-  console.log(token)
+const main = async () => {
+  // 
+  //   const task = await Task.findById('5d4746619f4c5c2950f8e189')
 
-  const data = jwt.verify(token, 'thisismynewcourse')
-  console.log(data)
+  // The line below is gonna find the user whose associated with this task & task.owner will now a profile instead of just being th id.
+  // Using populate we can know which creates which task or which task a user owns.
+
+  //   await task.populate('owner').execPopulate()
+  //   console.log(task.owner)
+  // 
+
+  const user = await User.findById('5d48d653b6062e1498d2dedd')
+  await user.populate('tasks').execPopulate()
+  console.log(user.tasks)
 }
 
-myFunction()
+main()

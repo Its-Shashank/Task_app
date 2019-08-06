@@ -49,6 +49,25 @@ const userSchema = new mongoose.Schema({
   }]
 })
 
+// Not actually data stored in database but a relationship b/w two entities.
+
+userSchema.virtual('tasks', {
+  ref: 'Task',
+  localField: '_id',
+  foreignField: 'owner'
+})
+
+// For hiding / deleting some information.
+
+userSchema.methods.toJSON = function () {
+  const user = this
+  const userObject = user.toObject()
+
+  delete userObject.password
+  delete userObject.tokens
+
+  return userObject
+}
 
 // To call generateAuthToken for generating the tokens.
 
